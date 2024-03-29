@@ -1,0 +1,21 @@
+#creat SRA toolkit environment in Anaconda3
+conda creat -n sra boiconda::sra-toolkit
+
+#load environment
+conda activate sra
+
+# Creat assention.txt using nano 
+nano assention.txt
+# assention.txt should be a list of all SRR runs 
+# sample assention list in assention.txt 
+
+#downlad reads from the SRA in .sra format
+prefetch --option-file <assenstionlist.txt>
+
+# split and convert forward and reverse reads into .fastq format using fastq-dump 
+for f in ./SRR*/*.sra;
+ do 
+fastq-dump --gzip --skip-technical --readids --dumpbase --split-3 --read-filter pass --clip $f; 
+done
+
+#output is paired fastq files lablled as SRR(assention number)_pass(1 or 2)_fastq.gz
