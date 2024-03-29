@@ -1,0 +1,14 @@
+# download  taxa.txt in tsv formant and sequence fasta for your desired database
+# run awk comand to create new fasta with identifieres replaced with taxonomy from taxa.txt
+awk '
+FNR==NR{
+  a[$1]=$2
+  b[$1]=++c[$2]
+  next
+}
+($2 in a) && /^>/{
+  print ">"a[$2]"_"b[$2]
+  next
+}
+1
+' taxa.txt FS="[> ]"  seqs.fasta >  id.fasta 
