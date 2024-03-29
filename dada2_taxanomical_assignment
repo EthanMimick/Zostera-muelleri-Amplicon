@@ -155,10 +155,7 @@ taxa.print <- taxa
 #creat taxa table for use in phyloseq
 asv_names = gsub(pattern=">", replacement="", x=asv_headers)
 taxa_new = cbind(asv_names, taxa.print)
-
 head(taxa_new)
-
-#going to have to remove the first row, I don't know how to fix it but it should be easy to fix 
 write.csv(taxa_new, "ASVs_taxonomy.csv") 
 
 #extracting standard goods from dada2

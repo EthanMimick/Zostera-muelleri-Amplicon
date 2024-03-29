@@ -4,6 +4,9 @@ conda creat -n sra boiconda::sra-toolkit
 #load environment
 conda activate sra
 
+#create project directory
+mkdir PRJNA542187
+
 # Creat assention.txt using nano 
 nano assention.txt
 # assention.txt should be a list of all SRR runs 

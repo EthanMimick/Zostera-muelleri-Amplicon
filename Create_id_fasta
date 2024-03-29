@@ -1,4 +1,5 @@
-# download  taxa.txt in tsv formant and sequence fasta for your desired database
+# download  taxa.txt in tsv formant and sequence.fasta for your desired database GSR was used for this example
+# files for GSR included in GSRDB folder
 # run awk comand to create new fasta with identifieres replaced with taxonomy from taxa.txt
 awk '
 FNR==NR{
@@ -12,3 +13,4 @@ FNR==NR{
 }
 1
 ' taxa.txt FS="[> ]"  seqs.fasta >  id.fasta 
+# fasta can then be used to Id taxa using dada2_taxonomical_assingment

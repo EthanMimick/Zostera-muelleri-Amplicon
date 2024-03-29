@@ -1,0 +1,16 @@
+# creat cutadapt environment in conda
+conda creat -n cutadaptenv cutadapt
+
+# activate environment
+conda activate cutadaptenv
+
+# in PRJNA542187 directory run 
+for i1 in ./filtN/*pass_1.fastq.gz;
+do 
+i2=${i1/_1/_2}
+out1=./cutadapt/$(basename ${i1})
+out2=${out1/_1/_2}
+cutadapt -g AGAGTTTGATCMTGGCTCAG -a AAGTCGTAACAAGGTAACCG -G CGGTTACCTTGTTACGACTT -A CTGAGCCAKGATCAAACTCT -n 2 -o ${out1} -p ${out2} ${i1} ${i2}
+done
+
+# trimed fastq files are deposited in the ./cutadapt directory
