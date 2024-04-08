@@ -1,0 +1,99 @@
+#install packages
+install.packages("caret")
+install.packages("DT")
+install.packages("MiscMetabar")
+#load libraries
+library(ANCOMBC)
+library(caret)
+library(DT)
+library(tidyverse)
+library(MiscMetabar)
+citation("ANCOMBC")
+packageVersion("ANCOMBC")
+#set working directory
+setwd("~/Classes/Grad/MBE 638/Final Project/PRJNA542187")
+
+#uploading your taxonomy and count data
+asv_tab = read.delim("ASVs_counts_Seagrass_16s_v2.tsv", sep = "\t")
+asv_tax = read.delim("ASVs_taxonomy_GSR.csv", sep=",")
+asv_tax = select(asv_tax,c("asv_names":"Species"))
+#export fixed csv
+write.csv(asv_tax, "ASVs_taxonomy_GSR.csv") 
+#need to construct around your data using your metadata table from Run Selector
+sample_info_tab = read.csv("Seagrass_16s_v2_metadata.csv")
+sample_info_tab$Site <- as.factor(sample_info_tab$Site)
+#need to make columns the rownames all of them
+#need to figure out what the row names are for all your data, likely if you followed the tutorial the tax and tab are "X")
+#for your sample data file the first row needs to be the SRR that is listed in your ASV files
+asv_tab = asv_tab %>% tibble::column_to_rownames("X")
+asv_tax = asv_tax %>% tibble::column_to_rownames("asv_names")
+sample_df = sample_info_tab %>% tibble::column_to_rownames("Run")
+
+
+
+#transforming your taxonomy data into a matrix for entry into phyloseq
+asv_mat = as.matrix(asv_tab)
+tax_mat = as.matrix(asv_tax)
+
+#transform into phyloseq objects
+asv = otu_table(asv_mat, taxa_are_rows=T)
+tax=tax_table(tax_mat)
+samples=sample_data(sample_df)
+
+
+#make a phyloseq object
+phy = phyloseq(asv, tax, samples)
+
+#remove chloroplast and mitochondria from your phyloseq object
+phy <- phy %>% subset_taxa( Family!= "mitochondria" | is.na(Family) & Order!="Chloroplast" | is.na(Order) ) 
+
+# Adjust below code "tissue" and what not accordingly.
+# run ANCOMBC-2 looking for difference between tissue type
+output_combined_tissue = ancombc2(data = phy, assay_name = "counts", tax_level = "Phylum",
+                           fix_formula = "tissue", rand_formula = NULL,
+                           p_adj_method = "fdr", pseudo = 0, pseudo_sens = TRUE,
+                           prv_cut = 0.01, lib_cut = 0, s0_perc = 0.05,
+                           group = "tissue", struc_zero = TRUE, neg_lb = FALSE,
+                           alpha = 0.05, n_cl = 2, verbose = TRUE,
+                           global = TRUE, pairwise = TRUE, dunnet = TRUE, trend = TRUE,
+                           iter_control = list(tol = 1e-2, max_iter = 20,
+                                               verbose = TRUE),
+                           em_control = list(tol = 1e-5, max_iter = 100),
+                           lme_control = lme4::lmerControl(),
+                           mdfdr_control = list(fwer_ctrl_method = "fdr", B = 100),
+                           trend_control = list(contrast = list(matrix(c(1, 0, -1, 1),
+                                                                       nrow = 2,
+                                                                       byrow = TRUE),
+                                                                matrix(c(-1, 0, 1, -1),
+                                                                       nrow = 2,
+                                                                       byrow = TRUE)),
+                                                node = list(2, 2),
+                                                solver = "ECOS",
+                                                B = 100))
+#extract result from ANCOMBC2 output
+res_prim_ti = output_combined_tissue$res
+res_prim_ti
+# do the same for site
+output_combined_Site = ancombc2(data = phy, assay_name = "counts", tax_level = "Phylum",
+                                  fix_formula = "Site", rand_formula = NULL,
+                                  p_adj_method = "fdr", pseudo = 0, pseudo_sens = TRUE,
+                                  prv_cut = 0.01, lib_cut = 0, s0_perc = 0.05,
+                                  group = "Site", struc_zero = TRUE, neg_lb = FALSE,
+                                  alpha = 0.05, n_cl = 2, verbose = TRUE,
+                                  global = TRUE, pairwise = TRUE, dunnet = TRUE, trend = TRUE,
+                                  iter_control = list(tol = 1e-2, max_iter = 20,
+                                                      verbose = TRUE),
+                                  em_control = list(tol = 1e-5, max_iter = 100),
+                                  lme_control = lme4::lmerControl(),
+                                  mdfdr_control = list(fwer_ctrl_method = "fdr", B = 100),
+                                  trend_control = list(contrast = list(matrix(c(1, 0, -1, 1),
+                                                                              nrow = 2,
+                                                                              byrow = TRUE),
+                                                                       matrix(c(-1, 0, 1, -1),
+                                                                              nrow = 2,
+                                                                              byrow = TRUE)),
+                                                       node = list(2, 2),
+                                                       solver = "ECOS",
+                                                       B = 100))
+res_prim_S = output_combined_Site$res
+res_prim_S
