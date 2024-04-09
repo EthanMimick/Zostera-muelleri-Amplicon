@@ -1,0 +1,6 @@
+The fasta included in hear is GSR-DB_V1-V3_cluster-1_seqs.fasta
+and taxa.txt is GSR-DB_V1-V3_cluster-1_taxa.txt 
+The id fasta created using the code in Creat_id_fasta only works for the V1-V3 16s region.
+Both of which are available for download from :https://manichanh.vhir.org/gsrdb/GSR-DB_V1-V3_cluster-1.tar.gz 
+Citation:
+Leidy-Alejandra G. Molano, Sara Vega-Abellaneda, Chaysavanh Manichanh. GSR-DB: a manually curated and optimized taxonomical database for 16S rRNA amplicon analysis. mSystems (2024) https://doi.org/10.1128/msystems.00950-23 

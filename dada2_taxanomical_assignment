@@ -34,8 +34,8 @@ fnRs <- sort(list.files(path, pattern = "_pass_2.fastq", full.names = TRUE))
 #what primeres were used in your study (if you can't find the study, just use 515F and 806R 
 #(FWD:GTGYCAGCMGCCGCGGTAA; REV:GGACTACNVGGGTWTCTAAT)
 
-FWD <- "AGAGTTTGATCMTGGCTCAG"  ## CHANGE ME to your forward primer sequence
-REV <- "CGGTTACCTTGTTACGACTT"  ## CHANGE ME...
+FWD <- "AGAGTTTGATCMTGGCTCAG"
+REV <- "CGGTTACCTTGTTACGACTT"
 
 # to ensure we have the right primers, and the correct orientation of the primers on the reads, we will verify the presence and orientation of these primers in the data.
 allOrients <- function(primer) {

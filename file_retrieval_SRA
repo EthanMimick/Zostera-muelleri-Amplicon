@@ -7,13 +7,11 @@ conda activate sra
 #create project directory
 mkdir PRJNA542187
 
-# Creat assention.txt using nano 
-nano assention.txt
 # assention.txt should be a list of all SRR runs 
 # sample assention list in assention.txt 
 
 #downlad reads from the SRA in .sra format
-prefetch --option-file <assenstionlist.txt>
+prefetch --option-file <assention.txt>
 
 # split and convert forward and reverse reads into .fastq format using fastq-dump 
 for f in ./SRR*/*.sra;
