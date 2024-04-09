@@ -1,7 +1,7 @@
 The files in this project give a step by step procedure 
 for my analysis of an amplicon data set looking at the 
 effects of seagrass wasting disease on Zostera muelleri.
-in Dr. Lidia Jeanne Baker's microbiome class.
+in Dr. Lydia Jeanne Baker's microbiome class.
 
 Table of contents
 1. file_retrieval_SRA
